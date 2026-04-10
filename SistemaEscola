@@ -1,0 +1,113 @@
+import java.util.Scanner;
+
+public class SistemaEscola {
+    public static void main(String[] args) {
+        int total = 0;
+        int opcao;
+        //Scanner para inserir informação do objeto
+        Scanner scanner = new Scanner(System.in);
+        //Array de objetos
+        Aluno[] alunos = new Aluno[100];
+        //Criação do Menu de Opções
+        do {
+            System.out.println(" ----- Fatec Franca ------ ");
+            System.out.println(" 1 - Cadastrar Aluno"); // Cadastra o Aluno
+            System.out.println(" 2 - Relatório por Nome"); // Lista todos os alunos e seus dados ordenados de A-Z (usando Selection Sort)
+            System.out.println(" 3 - Relatório por RA"); // Lista todos os alunos de maior RA para o menor
+            System.out.println(" 4 - Relatorio de Aprovados"); // Lista apenas os alunos com status aprovado
+            System.out.println(" 5 - Encerrar"); // Encerra o menu de opções
+            System.out.println(" -------------------------- ");
+            System.out.print(" Escolha uma opção: ");
+            opcao = scanner.nextInt();
+
+            switch (opcao) {
+                case 1:
+                    System.out.println(" ------- Cadastrar Aluno ------ ");
+                    scanner.nextLine();
+                    System.out.println(" Nome: ");
+                    String nome = scanner.nextLine();
+                    System.out.println(" RA: ");
+                    int ra = scanner.nextInt();
+                    System.out.println(" Idade: ");
+                    int idade = scanner.nextInt();
+                    System.out.println(" Sexo: ");
+                    String sexo = scanner.next();
+                    System.out.println(" Media: ");
+                    String entrada = scanner.next().replace(",", ".");
+                    double media = Double.parseDouble(entrada);
+
+                    alunos[total] = new Aluno(nome, ra, idade, sexo, media);
+                    total++;
+
+                    System.out.println(" Aluno cadastrado com sucesso!");
+                    break;
+
+                case 2:
+                        // Odenação por nome utilizando Selection sort (Modelo mais rapido para essa ocasião)
+                        for (int i = 0; i < total -1; i++) {
+                            int menor = i;
+                            for (int j = i + 1; j < total; j++) {
+                                if (alunos[j].getNome().compareToIgnoreCase(alunos[menor].getNome()) < 0) {
+                                    menor = j;
+                                }
+                            }
+                            // Aqui acontece a troca
+                            Aluno temp = alunos[i];
+                            alunos[i] = alunos[menor];
+                            alunos[menor] = temp;
+                        }
+                        System.out.println(" Segue Relatório por Nome ");
+                        for (int i = 0; i < total; i++) {
+                            System.out.println(alunos[i].toString());
+                        }
+                        break;
+
+                case 3:
+                    // Ordenação por RA
+                    for (int i = 0; i < total -1; i++) {
+                        for (int j = 0; j < total -1 -i; j++) {
+                            if (alunos[j].getRa() < alunos[j+1].getRa()){
+                                Aluno temp = alunos[j];
+                                alunos[j] = alunos[j+1];
+                                alunos[j+1] = temp;
+                            }
+                        }
+                    }
+                    System.out.println(" Segue Relatorio por RA ");
+                    for (int i = 0; i < total; i++) {
+                        System.out.println("Nome: " + alunos[i].getNome() + "\nRA: " + alunos[i].getRa());
+                    }
+                    break;
+
+                case 4:
+                    // Ordena por nome (Aprovados)
+                    for (int i = 0; i < total -1; i++) {
+                        int menor = i;
+                        for (int j = i + 1; j < total; j++) {
+                            if (alunos[j].getNome().compareToIgnoreCase(alunos[menor].getNome()) < 0) {
+                                menor = j;
+                            }
+                        }
+                        // Aqui acontece a troca
+                        Aluno temp = alunos[i];
+                        alunos[i] = alunos[menor];
+                        alunos[menor] = temp;
+                    }
+                    System.out.println(" Segue Relatório de Alunos Aprovados ");
+                    for (int i = 0; i < total; i++) {
+                        if (alunos[i].getResultado().equals("aprovado")) {
+                            System.out.println("Nome: " + alunos[i].getNome() + "\nMédia: " + alunos[i].getMedia() + "\nResultado: " + alunos[i].getResultado());
+                        }
+                    }
+                    break;
+
+                case 5:
+                    // Encerra o programa
+                    System.out.println(" ------ Encerrando ------ ");
+                    break;
+            }
+        }while (opcao != 5);
+
+        scanner.close();
+    }
+}
